@@ -16,13 +16,19 @@ public class Terrain {
   }
 
   public void reset() {
-    for (int row = 0; row < grid.length; row++) {
-      RpsBreed[] rowContents = grid[row];
-      for (int col = 0; col < rowContents.length; col++) {
-        rowContents[col] = RpsBreed.values()[rng.nextInt(RpsBreed.values().length)];
+    for (RpsBreed[] row : grid) {
+      for (int col = 0; col < row.length; col++) {
+        row[col] = RpsBreed.values()[rng.nextInt(RpsBreed.values().length)];
       }
     }
   }
+//    for (int row = 0; row < grid.length; row++) {
+//      RpsBreed[] rowContents = grid[row];
+//      for (int col = 0; col < rowContents.length; col++) {
+//        rowContents[col] = RpsBreed.values()[rng.nextInt(RpsBreed.values().length)];
+//      }
+//    }
+//  }
 
   public void step() {
     Location attackLocation = new Location(rng.nextInt(grid.length), rng.nextInt(grid.length));
@@ -47,7 +53,7 @@ public class Terrain {
   /**
    * Returns a reference to the terrain contents. <strong>Important</strong>
    * This is <strong>not</strong> a safe copy.
-   * 
+   *
    * @return
    */
   public RpsBreed[][] getGrid() {
