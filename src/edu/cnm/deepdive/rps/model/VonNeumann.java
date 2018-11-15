@@ -11,7 +11,7 @@ public class VonNeumann implements Neighborhood{
 
   @Override
   public Location[] neighbors() {
-    return new Location[0];
+    return neighbors;
   }
 
 }

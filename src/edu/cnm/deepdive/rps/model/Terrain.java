@@ -4,10 +4,11 @@ import java.util.Random;
 
 public class Terrain {
 
-  // Gris is assumed to be square.
+  // Grid is assumed to be square!!
   private RpsBreed[][] grid;
   private Random rng;
   private Neighborhood neighborhood;
+  private long iterations;
 
   public Terrain(int size, Random rng, Neighborhood neighborhood) {
     grid = new RpsBreed[size][size];
@@ -21,27 +22,28 @@ public class Terrain {
         row[col] = RpsBreed.values()[rng.nextInt(RpsBreed.values().length)];
       }
     }
-  }
 //    for (int row = 0; row < grid.length; row++) {
 //      RpsBreed[] rowContents = grid[row];
 //      for (int col = 0; col < rowContents.length; col++) {
 //        rowContents[col] = RpsBreed.values()[rng.nextInt(RpsBreed.values().length)];
 //      }
 //    }
-//  }
+    iterations = 0;
+  }
 
   public void step() {
-    Location attackLocation = new Location(rng.nextInt(grid.length), rng.nextInt(grid.length));
-    RpsBreed attacker = grid[attackLocation.getRow()][attackLocation.getColumn()];
+    Location attackerLocation = new Location(rng.nextInt(grid.length), rng.nextInt(grid.length));
+    RpsBreed attacker = grid[attackerLocation.getRow()][attackerLocation.getColumn()];
     Location offset = neighborhood.randomNeighbor(rng);
-    Location defenderLocation = normalize(attackLocation, offset);
+    Location defenderLocation  = normalize(attackerLocation, offset);
     RpsBreed defender = grid[defenderLocation.getRow()][defenderLocation.getColumn()];
     int result = RpsBreed.REFEREE.compare(attacker, defender);
     if (result < 0) {
-      grid[attackLocation.getRow()][attackLocation.getColumn()] = defender;
+      grid[attackerLocation.getRow()][attackerLocation.getColumn()] = defender;
     } else if (result > 0) {
       grid[defenderLocation.getRow()][defenderLocation.getColumn()] = attacker;
     }
+    iterations++;
   }
 
   public void step(int numSteps) {
@@ -51,7 +53,7 @@ public class Terrain {
   }
 
   /**
-   * Returns a reference to the terrain contents. <strong>Important</strong>
+   * Returns a reference to the terrain contents. <strong>Important!</strong>
    * This is <strong>not</strong> a safe copy.
    *
    * @return
@@ -65,4 +67,9 @@ public class Terrain {
     int col = (base.getColumn() + offset.getColumn() + grid.length) % grid.length;
     return new Location(row, col);
   }
+
+  public long getIterations() {
+    return iterations;
+  }
+
 }
